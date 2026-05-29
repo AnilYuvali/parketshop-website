@@ -1,39 +1,7 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Hero Plus Jakarta Sans";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/assets/hero-reference/plus-jakarta-500.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Hero Plus Jakarta Sans";
-  font-style: normal;
-  font-weight: 700;
-  font-display: swap;
-  src: url("/assets/hero-reference/plus-jakarta-700.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Hero Inter";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/assets/hero-reference/inter-400.ttf") format("truetype");
-}
-
-@font-face {
-  font-family: "Hero Inter";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/assets/hero-reference/inter-500.ttf") format("truetype");
-}
-
 @theme inline {
-  --font-sans: var(--font-manrope), Arial, sans-serif;
+  --font-sans: var(--font-plus-jakarta-sans), Arial, sans-serif;
   --color-brand: #d51f2a;
   --color-brand-bright: #e60035;
   --color-brand-deep: #c91f25;
@@ -68,7 +36,7 @@ body {
   margin: 0;
   background: #fff;
   color: var(--ink);
-  font-family: var(--font-manrope), Arial, sans-serif;
+  font-family: var(--font-plus-jakarta-sans), Arial, sans-serif;
 }
 
 button,
@@ -104,7 +72,7 @@ textarea {
   --header-compact-height: 64px;
   --header-nav-gap: 40px;
   --header-compact-nav-gap: 24px;
-  --header-logo-width: 157px;
+  --header-logo-width: 220px;
   --header-compact-logo-width: 146px;
   --header-state-transition: 500ms cubic-bezier(0.25, 0.1, 0.25, 1);
 }
@@ -133,7 +101,7 @@ textarea {
 }
 
 .site-header .header-logo {
-  width: min(var(--header-logo-width), 38vw);
+  width: min(var(--header-logo-width), 48vw);
   transition: width var(--header-state-transition);
 }
 
@@ -151,7 +119,7 @@ textarea {
 }
 
 .site-header[data-sticky="true"] .header-logo {
-  width: min(var(--header-compact-logo-width), 38vw);
+  width: min(var(--header-compact-logo-width), 48vw);
 }
 
 @media (max-width: 1023.98px) {
@@ -169,8 +137,8 @@ textarea {
     --header-full-height: 68px;
     --header-compact-height: 60px;
     --header-compact-padding: 16px;
-    --header-logo-width: 146px;
-    --header-compact-logo-width: 136px;
+    --header-logo-width: 192px;
+    --header-compact-logo-width: 150px;
   }
 }
 
@@ -264,7 +232,7 @@ textarea {
   max-width: 640px;
   margin: 0 0 30px;
   color: #12142a;
-  font-family: "Hero Plus Jakarta Sans", var(--font-manrope), Arial, sans-serif;
+  font-family: var(--font-plus-jakarta-sans), Arial, sans-serif;
   font-size: 54px;
   font-weight: 700;
   letter-spacing: 0;
@@ -275,7 +243,7 @@ textarea {
   max-width: 540px;
   margin: 0;
   color: #747474;
-  font-family: "Hero Inter", var(--font-manrope), Arial, sans-serif;
+  font-family: var(--font-plus-jakarta-sans), Arial, sans-serif;
   font-size: 18px;
   font-weight: 400;
   line-height: 1.6;
@@ -742,10 +710,6 @@ textarea {
 
 .tilt-surface:not(:hover) .tilt-visual {
   transform: perspective(500px) rotateX(0deg) rotateY(0deg) !important;
-}
-
-.tilt-surface:not(:hover) .tilt-glare {
-  opacity: 0 !important;
 }
 
 .primary-button {

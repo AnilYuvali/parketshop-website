@@ -247,9 +247,6 @@ export function TiltImage({
   const neutralTransform = "perspective(500px) rotateX(0deg) rotateY(0deg)";
   const [tilt, setTilt] = useState({
     transform: neutralTransform,
-    glareX: 50,
-    glareY: 50,
-    glareOpacity: 0,
   });
 
   const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
@@ -259,14 +256,10 @@ export function TiltImage({
     const y = (event.clientY - bounds.top) / bounds.height;
     setTilt({
       transform: `perspective(500px) rotateX(${((0.5 - y) * 14).toFixed(2)}deg) rotateY(${((x - 0.5) * 18).toFixed(2)}deg) scale3d(1.018, 1.018, 1)`,
-      glareX: x * 100,
-      glareY: y * 100,
-      glareOpacity: 1,
     });
   };
 
-  const resetTilt = () =>
-    setTilt({ transform: neutralTransform, glareX: 50, glareY: 50, glareOpacity: 0 });
+  const resetTilt = () => setTilt({ transform: neutralTransform });
 
   return (
     <div
@@ -287,16 +280,6 @@ export function TiltImage({
         }}
       >
         <Image src={src} alt={alt} width={width} height={height} sizes={sizes} priority={priority} className={className} />
-        {!reduceMotion && (
-          <span
-            aria-hidden="true"
-            className="tilt-glare pointer-events-none absolute inset-0 mix-blend-screen transition-opacity duration-200"
-            style={{
-              opacity: tilt.glareOpacity,
-              background: `radial-gradient(circle at ${tilt.glareX}% ${tilt.glareY}%, rgba(255, 255, 255, 0.54) 0%, rgba(255, 255, 255, 0.17) 10%, rgba(255, 255, 255, 0) 40%)`,
-            }}
-          />
-        )}
       </div>
     </div>
   );

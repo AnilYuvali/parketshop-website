@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 
-const manrope = localFont({
-  src: "../public/fonts/Manrope-Variable.ttf",
-  variable: "--font-manrope",
+const plusJakartaSans = localFont({
+  src: "../public/fonts/PlusJakartaSans-Variable.ttf",
+  variable: "--font-plus-jakarta-sans",
   display: "swap",
   weight: "200 800",
 });
@@ -22,7 +22,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="tr">
-      <body className={`${manrope.variable} antialiased`}>{children}</body>
+      <body className={`${plusJakartaSans.variable} antialiased`}>{children}</body>
     </html>
   );
 }

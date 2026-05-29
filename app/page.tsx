@@ -331,7 +331,7 @@ export default function HomePage() {
                 </Reveal>
 
                 <Reveal delay={0.06} className="parking-feature-visual">
-                  <Image
+                  <TiltImage
                     src="/assets/parking-screens.png"
                     width={1000}
                     height={1046}
@@ -353,7 +353,7 @@ export default function HomePage() {
         <section className="py-[86px] sm:py-[112px] lg:py-[126px]">
           <div className="page-container grid items-center gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-20">
             <Reveal className="relative flex justify-center">
-              <Image
+              <TiltImage
                 src="/assets/mall-screens.png"
                 width={1600}
                 height={1658}
