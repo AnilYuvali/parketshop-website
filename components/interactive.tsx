@@ -26,6 +26,7 @@ import {
   ReactNode,
   useState,
 } from "react";
+import type { ContactField, ContactFieldErrors } from "@/lib/contact/validation";
 
 const pricingLinks = [
   { label: "Ücretsiz Paket", href: "#fiyat" },
@@ -434,38 +435,211 @@ export function FaqAccordion() {
   );
 }
 
-export function ContactForm() {
-  const [submitted, setSubmitted] = useState(false);
+type ContactSubmitStatus = "idle" | "submitting" | "success" | "error";
 
-  const submit = (event: FormEvent<HTMLFormElement>) => {
+type ContactSubmitResponse = {
+  ok: boolean;
+  message?: string;
+  fieldErrors?: ContactFieldErrors;
+};
+
+const contactInputClass =
+  "h-[48px] rounded-md bg-white px-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-70";
+
+const contactTextareaClass =
+  "w-full resize-none rounded-md bg-white p-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-70";
+
+function contactErrorId(field: ContactField) {
+  return `contact-${field}-error`;
+}
+
+function ContactFieldError({ field, message }: { field: ContactField; message?: string }) {
+  if (!message) return null;
+
+  return (
+    <p
+      id={contactErrorId(field)}
+      className="mt-2 flex items-start gap-2 rounded-md border border-[#fca5a5] bg-[#fff7ed] px-3 py-2 text-[13px] font-extrabold leading-5 text-[#7f1d1d] shadow-[0_8px_22px_rgba(127,29,29,0.2)]"
+    >
+      <span aria-hidden="true" className="shrink-0">
+        ⚠️
+      </span>
+      <span>{message}</span>
+    </p>
+  );
+}
+
+export function ContactForm() {
+  const [status, setStatus] = useState<ContactSubmitStatus>("idle");
+  const [message, setMessage] = useState("");
+  const [fieldErrors, setFieldErrors] = useState<ContactFieldErrors>({});
+  const [startedAt, setStartedAt] = useState(() => Date.now());
+  const isSubmitting = status === "submitting";
+
+  const inputClass = (field: ContactField, baseClass = contactInputClass) =>
+    `${baseClass} w-full ${
+      fieldErrors[field] ? "border-2 border-[#f97316] ring-4 ring-[#fed7aa]" : "border-0"
+    }`;
+
+  const statusMessageClass =
+    status === "success"
+      ? "border border-[#86efac] bg-[#15803d] text-white shadow-[0_12px_28px_rgba(21,128,61,0.28)]"
+      : "border border-[#fecaca] bg-[#7f1d1d] text-white shadow-[0_12px_28px_rgba(127,29,29,0.22)]";
+
+  const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setSubmitted(true);
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+
+    setStatus("submitting");
+    setMessage("");
+    setFieldErrors({});
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          name: formData.get("name"),
+          phone: formData.get("phone"),
+          email: formData.get("email"),
+          message: formData.get("message"),
+          website: formData.get("website"),
+          startedAt,
+          pageUrl: window.location.href,
+        }),
+      });
+
+      const result = (await response.json()) as ContactSubmitResponse;
+
+      if (!response.ok || !result.ok) {
+        setStatus("error");
+        setFieldErrors(result.fieldErrors ?? {});
+        setMessage(result.message ?? "Mesajınız gönderilemedi. Lütfen tekrar deneyin.");
+        return;
+      }
+
+      form.reset();
+      setStartedAt(Date.now());
+      setStatus("success");
+      setMessage(result.message ?? "Mesajınız alındı. Teşekkür ederiz.");
+    } catch {
+      setStatus("error");
+      setMessage("Mesajınız gönderilemedi. Lütfen bağlantınızı kontrol edip tekrar deneyin.");
+    }
   };
 
   return (
-    <form onSubmit={submit} className="rounded-2xl bg-brand-deep p-7 text-white sm:p-10">
+    <form onSubmit={submit} className="relative rounded-2xl bg-brand-deep p-7 text-white sm:p-10" noValidate>
       <h3 className="text-[26px] font-extrabold leading-tight tracking-[-0.04em]">Herhangi Bir Sorunuz Var mı?</h3>
       <p className="mt-4 text-[14px] leading-7 text-white/76">Sorunuzu bize yazın; ekibimiz en kısa sürede sizinle iletişime geçsin.</p>
-      <div className="mt-7 grid gap-3 sm:grid-cols-2">
-        <label className="sr-only" htmlFor="name">Adınız</label>
-        <input id="name" name="name" required placeholder="Adınız" className="h-[48px] rounded-md bg-white px-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50" />
-        <label className="sr-only" htmlFor="phone">Telefon</label>
-        <input id="phone" name="phone" required placeholder="Telefon" className="h-[48px] rounded-md bg-white px-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50" />
+
+      <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
+        <label htmlFor="website">Website</label>
+        <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
-      <label className="sr-only" htmlFor="email">E-posta</label>
-      <input id="email" name="email" type="email" required placeholder="E-posta adresiniz" className="mt-3 h-[48px] w-full rounded-md bg-white px-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50" />
-      <label className="sr-only" htmlFor="message">Mesajınız</label>
-      <textarea id="message" name="message" required placeholder="Mesajınız..." rows={5} className="mt-3 w-full resize-none rounded-md bg-white p-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50" />
-      <button type="submit" className="mx-auto mt-5 flex h-[48px] items-center justify-center gap-2 rounded-md bg-ink px-8 text-sm font-bold text-white transition-colors hover:bg-[#252a37]">
-        Mesajınızı Gönderin <Send className="h-4 w-4" />
+
+      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+        <div>
+          <label className="sr-only" htmlFor="name">Adınız</label>
+          <input
+            id="name"
+            name="name"
+            required
+            minLength={2}
+            maxLength={120}
+            autoComplete="name"
+            placeholder="Adınız"
+            disabled={isSubmitting}
+            aria-invalid={Boolean(fieldErrors.name)}
+            aria-describedby={fieldErrors.name ? contactErrorId("name") : undefined}
+            className={inputClass("name")}
+          />
+          <ContactFieldError field="name" message={fieldErrors.name} />
+        </div>
+        <div>
+          <label className="sr-only" htmlFor="phone">Telefon</label>
+          <input
+            id="phone"
+            name="phone"
+            type="tel"
+            required
+            minLength={7}
+            maxLength={32}
+            autoComplete="tel"
+            placeholder="Telefon"
+            disabled={isSubmitting}
+            aria-invalid={Boolean(fieldErrors.phone)}
+            aria-describedby={fieldErrors.phone ? contactErrorId("phone") : undefined}
+            className={inputClass("phone")}
+          />
+          <ContactFieldError field="phone" message={fieldErrors.phone} />
+        </div>
+      </div>
+
+      <div className="mt-3">
+        <label className="sr-only" htmlFor="email">E-posta</label>
+        <input
+          id="email"
+          name="email"
+          type="email"
+          required
+          maxLength={254}
+          autoComplete="email"
+          placeholder="E-posta adresiniz"
+          disabled={isSubmitting}
+          aria-invalid={Boolean(fieldErrors.email)}
+          aria-describedby={fieldErrors.email ? contactErrorId("email") : undefined}
+          className={inputClass("email")}
+        />
+        <ContactFieldError field="email" message={fieldErrors.email} />
+      </div>
+
+      <div className="mt-3">
+        <label className="sr-only" htmlFor="message">Mesajınız</label>
+        <textarea
+          id="message"
+          name="message"
+          required
+          minLength={10}
+          maxLength={2000}
+          placeholder="Mesajınız..."
+          rows={5}
+          disabled={isSubmitting}
+          aria-invalid={Boolean(fieldErrors.message)}
+          aria-describedby={fieldErrors.message ? contactErrorId("message") : undefined}
+          className={inputClass("message", contactTextareaClass)}
+        />
+        <ContactFieldError field="message" message={fieldErrors.message} />
+      </div>
+
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="mx-auto mt-5 flex h-[48px] items-center justify-center gap-2 rounded-md bg-ink px-8 text-sm font-bold text-white transition-colors hover:bg-[#252a37] disabled:cursor-not-allowed disabled:opacity-75"
+      >
+        {isSubmitting ? "Gönderiliyor..." : "Mesajınızı Gönderin"} {status === "success" ? <Check className="h-4 w-4" /> : <Send className="h-4 w-4" />}
       </button>
-      <AnimatePresence>
-        {submitted ? (
-          <motion.p initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} role="status" className="mt-4 text-center text-sm font-semibold text-white">
-            Mesajınız alındı. Teşekkür ederiz.
-          </motion.p>
-        ) : null}
-      </AnimatePresence>
+
+      <div className="min-h-[38px]">
+        <AnimatePresence mode="wait">
+          {message ? (
+            <motion.p
+              key={`${status}-${message}`}
+              initial={{ opacity: 0, y: 5 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -5 }}
+              role={status === "error" ? "alert" : "status"}
+              className={`mt-4 rounded-md px-3 py-2 text-center text-sm font-extrabold ${statusMessageClass}`}
+            >
+              {message}
+            </motion.p>
+          ) : null}
+        </AnimatePresence>
+      </div>
     </form>
   );
 }
