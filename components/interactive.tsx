@@ -62,7 +62,7 @@ const heroPhoneSlides = [
 const navigation = [
   { label: "Ana Sayfa", href: "/#hero", icon: "home" },
   { label: "AVM Otopark", href: "/avm-otopark" },
-  { label: "AVM İçi", href: "/#avm-ici" },
+  { label: "AVM İçi", href: "/avm-ici" },
   { label: "Hakkında", href: "/#hakkinda" },
   { label: "İletişim", href: "/iletisim" },
 ];
