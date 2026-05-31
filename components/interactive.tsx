@@ -59,17 +59,17 @@ const heroPhoneSlides = [
 ];
 
 const pricingLinks = [
-  { label: "Ücretsiz Paket", href: "#fiyat" },
-  { label: "Aylık Premium", href: "#fiyat" },
-  { label: "Kurumsal Çözümler", href: "#iletisim" },
+  { label: "Ücretsiz Paket", href: "/#fiyat" },
+  { label: "Aylık Premium", href: "/#fiyat" },
+  { label: "Kurumsal Çözümler", href: "/iletisim" },
 ];
 
 const navigation = [
-  { label: "Ana Sayfa", href: "#hero" },
-  { label: "Hakkında", href: "#hakkinda" },
-  { label: "Fiyat", href: "#fiyat", dropdown: true },
-  { label: "Özellikler", href: "#otopark" },
-  { label: "İletişim", href: "#iletisim" },
+  { label: "Ana Sayfa", href: "/#hero" },
+  { label: "Hakkında", href: "/#hakkinda" },
+  { label: "Fiyat", href: "/#fiyat", dropdown: true },
+  { label: "Özellikler", href: "/#otopark" },
+  { label: "İletişim", href: "/iletisim" },
 ];
 
 export function Header() {
@@ -84,10 +84,20 @@ export function Header() {
   });
 
   const closeMobileAndNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
-    event.preventDefault();
-    setPendingMobileTarget(href);
     setMobileOpen(false);
     setPricingOpen(false);
+
+    const samePageHash =
+      href.startsWith("#")
+        ? href
+        : href.startsWith("/#") && window.location.pathname === "/"
+          ? href.slice(1)
+          : null;
+
+    if (!samePageHash) return;
+
+    event.preventDefault();
+    setPendingMobileTarget(samePageHash);
   };
 
   return (
@@ -105,7 +115,7 @@ export function Header() {
         }`}
       >
         <div className={`header-content flex items-center justify-between ${isSticky ? "h-16" : "h-[76px]"}`}>
-          <a href="#hero" aria-label="ParketShop ana sayfa">
+          <a href="/#hero" aria-label="ParketShop ana sayfa">
             <Image
               src="/assets/parketshop-logo.svg"
               alt="ParketShop"
