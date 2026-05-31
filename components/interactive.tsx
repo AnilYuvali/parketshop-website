@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { usePathname } from "next/navigation";
 import {
   AnimatePresence,
   motion,
@@ -70,7 +71,9 @@ export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [pendingMobileTarget, setPendingMobileTarget] = useState<string | null>(null);
+  const pathname = usePathname();
   const { scrollY } = useScroll();
+  const useLightInitialHeader = pathname === "/avm-otopark" && !isSticky;
 
   useMotionValueEvent(scrollY, "change", (latest) => {
     setIsSticky(latest >= 200);
@@ -109,7 +112,11 @@ export function Header() {
         <div className={`header-content flex items-center justify-between ${isSticky ? "h-16" : "h-[76px]"}`}>
           <a href="/#hero" aria-label="ParketShop ana sayfa">
             <Image
-              src="/assets/parketshop-logo.svg"
+              src={
+                useLightInitialHeader
+                  ? "/assets/parketshop-logo-white-text.svg"
+                  : "/assets/parketshop-logo.svg"
+              }
               alt="ParketShop"
               width={157}
               height={30}
@@ -117,12 +124,20 @@ export function Header() {
               className="header-logo h-auto w-[146px] md:w-[157px]"
             />
           </a>
-          <nav className="site-nav hidden items-center gap-10 text-[14px] font-semibold text-ink lg:flex">
+          <nav
+            className={`site-nav hidden items-center gap-10 text-[14px] font-semibold lg:flex ${
+              useLightInitialHeader ? "text-white" : "text-ink"
+            }`}
+          >
             {navigation.map((item) => (
               <a
                 key={item.label}
-                className={`transition-colors hover:text-brand ${
-                  item.icon === "home" ? "grid h-10 w-10 place-items-center rounded-full hover:bg-[#fff4f4]" : "py-7"
+                className={`transition-colors ${useLightInitialHeader ? "hover:text-white/80" : "hover:text-brand"} ${
+                  item.icon === "home"
+                    ? `grid h-10 w-10 place-items-center rounded-full ${
+                        useLightInitialHeader ? "hover:bg-white/10" : "hover:bg-[#fff4f4]"
+                      }`
+                    : "py-7"
                 }`}
                 href={item.href}
                 aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}

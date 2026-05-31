@@ -1684,7 +1684,7 @@ a:focus-visible {
 
 .map-entry {
   position: absolute;
-  bottom: 56px;
+  bottom: 43px;
   left: 48px;
   z-index: 4;
   display: grid;
@@ -1743,8 +1743,8 @@ a:focus-visible {
 
 .target-pulse {
   position: absolute;
-  top: 92px;
-  right: 92px;
+  top: 85px;
+  right: 88px;
   z-index: 4;
   width: 16px;
   height: 16px;
@@ -1944,7 +1944,7 @@ a:focus-visible {
 
 .journey-reel::before {
   position: absolute;
-  top: 41px;
+  top: 130px;
   left: 24px;
   right: 24px;
   height: 2px;

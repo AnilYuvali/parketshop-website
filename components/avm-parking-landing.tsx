@@ -269,13 +269,13 @@ function OccupancyDashboard() {
 
 function AiParkingMap() {
   const slots = [
-    { id: "A-01", state: "empty" },
-    { id: "A-02", state: "recommended" },
+    { id: "A-01", state: "occupied" },
+    { id: "A-02", state: "occupied" },
     { id: "A-03", state: "occupied" },
-    { id: "B-11", state: "empty" },
-    { id: "B-14", state: "empty" },
+    { id: "B-11", state: "recommended" },
+    { id: "B-14", state: "occupied" },
     { id: "C-08", state: "occupied" },
-    { id: "C-12", state: "empty" },
+    { id: "C-12", state: "occupied" },
     { id: "D-04", state: "occupied" },
   ];
 
@@ -294,10 +294,12 @@ function AiParkingMap() {
 
       <div className="ai-map-canvas">
         <svg className="ai-route-svg" viewBox="0 0 560 340" aria-hidden="true">
-          <path d="M66 294 H244 V218 H353 V122 H445" />
+          <path d="M66 294 H280 V150 V145 H467 V125" />
         </svg>
         <div className="map-entry">
-          <Navigation className="h-5 w-5" />
+          <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+            <polygon points="5 4 20 12 5 20 8.5 12 5 4" />
+          </svg>
         </div>
         <div className="slot-grid">
           {slots.map((slot) => (
@@ -406,35 +408,20 @@ export function AvmParkingLanding() {
           <div className="avm-parking-hero-overlay" aria-hidden="true" />
           <div className="page-container relative z-10 flex min-h-[calc(100svh-44px)] items-center py-28 sm:py-32 lg:min-h-[calc(100svh-56px)]">
             <div className="max-w-[760px] pt-10 text-white">
-              <motion.h1
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                className="text-[44px] font-extrabold leading-[1.05] sm:text-[58px] lg:text-[72px]"
-              >
+              <h1 className="text-[44px] font-extrabold leading-[1.05] sm:text-[58px] lg:text-[72px]">
                 AVM otoparkını daha akıllı, hızlı ve stressiz hale getirin.
-              </motion.h1>
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.08, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-7 max-w-[640px] text-[17px] font-medium leading-8 text-white/82 sm:text-[20px]"
-              >
+              </h1>
+              <p className="mt-7 max-w-[640px] text-[17px] font-medium leading-8 text-white/82 sm:text-[20px]">
                 ParketShop, AVM’ye gitmeden önce doluluğu gösterir, yapay zeka ile en uygun boş park yerini önerir, aracınızı kaydeder ve ödemenizi uygulamadan tamamlatır.
-              </motion.p>
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.7, delay: 0.16, ease: [0.22, 1, 0.36, 1] }}
-                className="mt-9 flex flex-wrap gap-4"
-              >
+              </p>
+              <div className="mt-9 flex flex-wrap gap-4">
                 <a href="#akilli-park-yeri" className="inline-flex h-14 items-center justify-center gap-2 rounded-[14px] bg-brand px-7 text-sm font-extrabold text-white shadow-[0_20px_50px_rgba(237,0,51,0.35)] transition hover:-translate-y-px hover:bg-[#b91c24]">
                   Deneyimi keşfet <ArrowRight className="h-4 w-4" />
                 </a>
                 <a href="#indir" className="inline-flex h-14 items-center justify-center rounded-[14px] border border-white/35 bg-white/12 px-7 text-sm font-extrabold text-white backdrop-blur-md transition hover:-translate-y-px hover:bg-white/18">
                   Uygulamayı indir
                 </a>
-              </motion.div>
+              </div>
             </div>
             <HeroScreens />
           </div>
