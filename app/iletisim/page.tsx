@@ -87,7 +87,7 @@ export default function ContactPage() {
               <div className="mb-7">
                 <p className="eyebrow">
                   <span aria-hidden="true" />
-                  Form & Harita
+                  Form & Adres
                 </p>
                 <h2 className="section-title max-w-[520px]">Sorularınız için buradayız</h2>
                 <p className="body-copy mt-5 max-w-[560px]">

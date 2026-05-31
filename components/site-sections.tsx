@@ -157,12 +157,14 @@ export function Footer() {
           <p className="text-[14px] font-extrabold">Yararlı Linkler</p>
           <div className="mt-5 space-y-3 text-[13px] text-muted">
             <a className="block hover:text-brand" href="/#hero">Ana Sayfa</a>
+            <a className="block hover:text-brand" href="/#otopark">AVM Otopark</a>
+            <a className="block hover:text-brand" href="/#avm-ici">AVM İçi</a>
             <a className="block hover:text-brand" href="/#hakkinda">Hakkında</a>
-            <a className="block hover:text-brand" href="/#fiyat">Fiyat</a>
+            <a className="block hover:text-brand" href="/iletisim">İletişim</a>
           </div>
         </div>
         <div>
-          <p className="text-[14px] font-extrabold">Özellikler</p>
+          <p className="text-[14px] font-extrabold">AVM Deneyimi</p>
           <div className="mt-5 space-y-3 text-[13px] text-muted">
             <a className="block hover:text-brand" href="/#otopark">Otopark</a>
             <a className="block hover:text-brand" href="/#ekranlar">Navigasyon</a>

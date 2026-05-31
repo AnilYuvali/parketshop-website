@@ -10,9 +10,9 @@ import {
 } from "framer-motion";
 import {
   Check,
-  ChevronDown,
   ChevronLeft,
   ChevronRight,
+  House,
   Menu,
   Minus,
   Plus,
@@ -58,23 +58,16 @@ const heroPhoneSlides = [
   },
 ];
 
-const pricingLinks = [
-  { label: "Ücretsiz Paket", href: "/#fiyat" },
-  { label: "Aylık Premium", href: "/#fiyat" },
-  { label: "Kurumsal Çözümler", href: "/iletisim" },
-];
-
 const navigation = [
-  { label: "Ana Sayfa", href: "/#hero" },
+  { label: "Ana Sayfa", href: "/#hero", icon: "home" },
+  { label: "AVM Otopark", href: "/#otopark" },
+  { label: "AVM İçi", href: "/#avm-ici" },
   { label: "Hakkında", href: "/#hakkinda" },
-  { label: "Fiyat", href: "/#fiyat", dropdown: true },
-  { label: "Özellikler", href: "/#otopark" },
   { label: "İletişim", href: "/iletisim" },
 ];
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [pricingOpen, setPricingOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [pendingMobileTarget, setPendingMobileTarget] = useState<string | null>(null);
   const { scrollY } = useScroll();
@@ -85,7 +78,6 @@ export function Header() {
 
   const closeMobileAndNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     setMobileOpen(false);
-    setPricingOpen(false);
 
     const samePageHash =
       href.startsWith("#")
@@ -126,52 +118,19 @@ export function Header() {
             />
           </a>
           <nav className="site-nav hidden items-center gap-10 text-[14px] font-semibold text-ink lg:flex">
-            {navigation.map((item) =>
-              item.dropdown ? (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => setPricingOpen(true)}
-                  onMouseLeave={() => setPricingOpen(false)}
-                >
-                  <button
-                    type="button"
-                    aria-expanded={pricingOpen}
-                    aria-haspopup="true"
-                    className="flex items-center gap-1.5 py-7 transition-colors hover:text-brand"
-                    onClick={() => setPricingOpen((open) => !open)}
-                  >
-                    {item.label}
-                    <ChevronDown className="h-3.5 w-3.5" />
-                  </button>
-                  <AnimatePresence>
-                    {pricingOpen ? (
-                      <motion.div
-                        initial={{ opacity: 0, y: 8 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        exit={{ opacity: 0, y: 8 }}
-                        transition={{ duration: 0.16 }}
-                        className="absolute left-1/2 top-[62px] w-52 -translate-x-1/2 rounded-xl border border-[#edf0f5] bg-white p-2 shadow-[0_18px_45px_rgba(20,24,36,0.1)]"
-                      >
-                        {pricingLinks.map((link) => (
-                          <a
-                            key={link.label}
-                            href={link.href}
-                            className="block rounded-lg px-4 py-3 text-[13px] text-ink transition-colors hover:bg-[#fff4f4] hover:text-brand"
-                          >
-                            {link.label}
-                          </a>
-                        ))}
-                      </motion.div>
-                    ) : null}
-                  </AnimatePresence>
-                </div>
-              ) : (
-                <a key={item.label} className="py-7 transition-colors hover:text-brand" href={item.href}>
-                  {item.label}
-                </a>
-              ),
-            )}
+            {navigation.map((item) => (
+              <a
+                key={item.label}
+                className={`transition-colors hover:text-brand ${
+                  item.icon === "home" ? "grid h-10 w-10 place-items-center rounded-full hover:bg-[#fff4f4]" : "py-7"
+                }`}
+                href={item.href}
+                aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}
+                title={item.icon === "home" ? "Ana sayfa" : undefined}
+              >
+                {item.icon === "home" ? <House className="h-[18px] w-[18px]" strokeWidth={2.2} /> : item.label}
+              </a>
+            ))}
           </nav>
           <button
             className={`grid h-11 w-11 place-items-center rounded-full border transition-colors lg:hidden ${
@@ -205,41 +164,15 @@ export function Header() {
           >
             <div className="flex flex-col px-5 py-3">
               {navigation.map((item) => (
-                <div key={item.label}>
-                  {item.dropdown ? (
-                    <button
-                      type="button"
-                      aria-expanded={pricingOpen}
-                      className="flex w-full items-center justify-between py-3.5 text-sm font-semibold"
-                      onClick={() => setPricingOpen((open) => !open)}
-                    >
-                      {item.label}
-                      <ChevronDown className="h-4 w-4" />
-                    </button>
-                  ) : (
-                    <a
-                      href={item.href}
-                      className="flex items-center justify-between py-3.5 text-sm font-semibold"
-                      onClick={(event) => closeMobileAndNavigate(event, item.href)}
-                    >
-                      {item.label}
-                    </a>
-                  )}
-                  {item.dropdown && pricingOpen ? (
-                    <div className="mb-2 rounded-lg bg-mist px-3 py-1">
-                      {pricingLinks.map((link) => (
-                        <a
-                          key={link.label}
-                          href={link.href}
-                          className="block py-3 text-sm text-muted"
-                          onClick={(event) => closeMobileAndNavigate(event, link.href)}
-                        >
-                          {link.label}
-                        </a>
-                      ))}
-                    </div>
-                  ) : null}
-                </div>
+                <a
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center justify-between py-3.5 text-sm font-semibold"
+                  onClick={(event) => closeMobileAndNavigate(event, item.href)}
+                  aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}
+                >
+                  {item.icon === "home" ? <House className="h-[18px] w-[18px]" strokeWidth={2.2} /> : item.label}
+                </a>
               ))}
               <a
                 href="#indir"
@@ -413,6 +346,14 @@ const gallerySlides = [
   { src: "/assets/slider-screens/screen-10.png", alt: "ParketShop otopark çıkış detay ekranı", label: "Çıkış" },
   { src: "/assets/slider-screens/screen-11.png", alt: "ParketShop otopark dönüş canlı görünüm ekranı", label: "Canlı görünüm" },
   { src: "/assets/slider-screens/screen-12.png", alt: "ParketShop sepet özet ekranı", label: "Sepet" },
+  { src: "/assets/slider-screens/screen-13.png", alt: "ParketShop AVM içi ana ekranı", label: "AVM içi ana ekran" },
+  { src: "/assets/slider-screens/screen-14.png", alt: "ParketShop AVM içi yönlendirme ekranı", label: "AVM içi yönlendirme" },
+  { src: "/assets/slider-screens/screen-15.png", alt: "ParketShop AVM mağazalar ekranı", label: "AVM mağazalar" },
+  { src: "/assets/slider-screens/screen-16.png", alt: "ParketShop AVM restoranlar ekranı", label: "AVM restoranlar" },
+  { src: "/assets/slider-screens/screen-17.png", alt: "ParketShop AVM gezinti kıyafet ekranı", label: "AVM gezinti kıyafet" },
+  { src: "/assets/slider-screens/screen-18.png", alt: "ParketShop AVM gezinti canlı görünüm ekranı", label: "AVM canlı görünüm" },
+  { src: "/assets/slider-screens/screen-19.png", alt: "ParketShop AVM içi rota ekranı", label: "AVM içi rota" },
+  { src: "/assets/slider-screens/screen-20.png", alt: "ParketShop AVM içi detay ekranı", label: "AVM içi detay" },
 ];
 
 export function ScreenshotCarousel() {
