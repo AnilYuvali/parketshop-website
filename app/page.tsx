@@ -10,6 +10,7 @@ import {
   ContactForm,
   FaqAccordion,
   Header,
+  HeroPhoneCarousel,
   PricingCards,
   Reveal,
   ScreenshotCarousel,
@@ -73,7 +74,10 @@ function SectionHeading({
 }) {
   return (
     <div className={`mx-auto max-w-[680px] text-center ${className}`}>
-      <p className="eyebrow">{eyebrow}</p>
+      <p className="eyebrow">
+        <span aria-hidden="true" />
+        {eyebrow}
+      </p>
       <h2 className="section-title mt-4">{title}</h2>
       {description ? <p className="body-copy mt-5">{description}</p> : null}
     </div>
@@ -217,7 +221,15 @@ export default function HomePage() {
             <div className="hero-reference-row">
               <div className="hero-reference-col">
                 <Reveal className="hero-reference-content">
-                  <h1>AVM’lere Yeni Bir Soluk Geliyor!</h1>
+                  <div className="hero-reference-eyebrow">
+                    <span aria-hidden="true" />
+                    AVM Deneyimi · Yeniden Tasarlandı
+                  </div>
+                  <h1>
+                    <span>AVM&apos;lere</span>
+                    <span className="hero-reference-title-highlight">Yeni Bir Soluk</span>
+                    <span>Geliyor!</span>
+                  </h1>
                   <p>
                     AVM’ler ile entegre en gelişmiş yer bulma ve hizmetler
                     uygulaması ParketShop yakında sizlerle...
@@ -244,15 +256,8 @@ export default function HomePage() {
                 </Reveal>
               </div>
               <div className="hero-reference-col">
-                <Reveal delay={0.1} className="hero-reference-image">
-                  <Image
-                    src="/assets/hero-reference/hand-holding-app-parketshop.png"
-                    alt="ParketShop uygulamasının elde tutulan telefon görünümü"
-                    width={917}
-                    height={1280}
-                    priority
-                    sizes="(max-width: 991px) 94vw, 564px"
-                  />
+                <Reveal delay={0.1}>
+                  <HeroPhoneCarousel />
                 </Reveal>
               </div>
             </div>
@@ -271,10 +276,24 @@ export default function HomePage() {
         <section id="hakkinda" className="scroll-mt-20 py-[84px] sm:py-[108px] lg:py-[122px]">
           <div className="page-container grid items-center gap-14 lg:grid-cols-[0.96fr_1.04fr] lg:gap-16">
             <Reveal>
-              <p className="eyebrow">Neden ParketShop</p>
+              <p className="eyebrow">
+                <span aria-hidden="true" />
+                Neden ParketShop
+              </p>
               <h2 className="section-title mt-4 max-w-[500px]">
                 AVM’ler İçin Yapılmış En Gelişmiş Yer Bulma &amp; Hizmetler Uygulaması
               </h2>
+              <div className="relative my-8 flex justify-center lg:hidden">
+                <Image
+                  src="/assets/find-stop-app.png"
+                  width={1592}
+                  height={1800}
+                  alt="ParketShop otopark, ana sayfa ve harita uygulama ekranları"
+                  priority
+                  sizes="(max-width: 1024px) 90vw, 570px"
+                  className="phone-shadow h-auto w-full max-w-[420px]"
+                />
+              </div>
               <p className="body-copy mt-6 max-w-[500px]">
                 AVM ziyaretinizde zaman kazanın; park yeri, yönlendirme, mağaza
                 ve kampanya bilgilerine tek uygulama üzerinden erişin.
@@ -288,9 +307,6 @@ export default function HomePage() {
                 ))}
               </ul>
               <div className="mt-10 flex flex-wrap items-center gap-7">
-                <a className="primary-button" href="#indir">
-                  Uygulamayı indir
-                </a>
                 <a href="#ekranlar" className="flex items-center gap-3 text-sm font-semibold text-ink">
                   <span className="grid h-11 w-11 place-items-center rounded-full border border-[#f0d1d4] text-brand">
                     <Play className="ml-0.5 h-4 w-4 fill-current" />
@@ -299,7 +315,7 @@ export default function HomePage() {
                 </a>
               </div>
             </Reveal>
-            <Reveal delay={0.1} className="relative flex justify-center">
+            <Reveal delay={0.1} className="relative hidden justify-center lg:flex">
               <TiltImage
                 src="/assets/find-stop-app.png"
                 width={1592}
@@ -317,7 +333,10 @@ export default function HomePage() {
           <div className="parking-feature-area">
             <div className="parking-feature-container">
               <Reveal className="parking-feature-title">
-                <p className="parking-feature-eyebrow">AVM Otopark</p>
+                <p className="parking-feature-eyebrow">
+                  <span aria-hidden="true" />
+                  AVM Otopark
+                </p>
                 <h2>
                   Boş Park Yeri ve Aracını Bulmak İçin İhtiyacın Olan Tek
                   Uygulama
@@ -350,9 +369,9 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section className="py-[86px] sm:py-[112px] lg:py-[126px]">
+        <section id="avm-ici" className="py-[86px] sm:py-[112px] lg:py-[126px]">
           <div className="page-container grid items-center gap-14 lg:grid-cols-[1.08fr_0.92fr] lg:gap-20">
-            <Reveal className="relative flex justify-center">
+            <Reveal className="relative hidden justify-center lg:flex">
               <TiltImage
                 src="/assets/mall-screens.png"
                 width={1600}
@@ -363,10 +382,23 @@ export default function HomePage() {
               />
             </Reveal>
             <Reveal delay={0.08}>
-              <p className="eyebrow">AVM İçi</p>
+              <p className="eyebrow">
+                <span aria-hidden="true" />
+                AVM İçi
+              </p>
               <h2 className="section-title mt-4">
                 İhtiyaç Duyduğunuz Tüm Bilgiler Tek Bir Uygulamada
               </h2>
+              <div className="relative my-8 flex justify-center lg:hidden">
+                <Image
+                  src="/assets/mall-screens.png"
+                  width={1600}
+                  height={1658}
+                  alt="ParketShop AVM içi kampanyalar, mağazalar ve ürün ekranları"
+                  sizes="(max-width: 1024px) 92vw, 605px"
+                  className="phone-shadow h-auto w-full max-w-[420px]"
+                />
+              </div>
               <p className="body-copy mt-6">
                 Favori mağazanıza ulaşın, indirimleri keşfedin ve size özel
                 fırsatları alışveriş sırasında anında değerlendirin.
@@ -402,11 +434,11 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="ekranlar" className="overflow-hidden py-[78px] scroll-mt-20 sm:py-[102px]">
+        <section id="ekranlar" className="overflow-hidden scroll-mt-20">
           <div className="page-container">
             <Reveal>
               <SectionHeading
-                eyebrow="ParketShop Ekran Görüntüleri"
+                eyebrow="Ekran Görüntüleri"
                 title="Uygulamamızın Arayüzünü İnceleyin"
               />
             </Reveal>
@@ -420,7 +452,7 @@ export default function HomePage() {
           <div className="page-container">
             <Reveal>
               <SectionHeading
-                eyebrow="ParketShop Üyelik Paketleri"
+                eyebrow="Üyelik Paketleri"
                 title="Üyelik Paketlerimizi İnceleyin"
                 description="İhtiyacınıza uygun paketle AVM ziyaretlerinizi daha hızlı ve avantajlı hale getirin."
               />
@@ -429,7 +461,7 @@ export default function HomePage() {
           </div>
         </section>
 
-        <section id="iletisim" className="py-[84px] scroll-mt-20 sm:py-[114px]">
+        <section id="iletisim" className="scroll-mt-20">
           <div className="page-container">
             <Reveal>
               <SectionHeading eyebrow="SSS" title="Sıkça Sorulan Sorular" />

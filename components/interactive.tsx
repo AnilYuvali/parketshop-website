@@ -21,12 +21,42 @@ import {
 } from "lucide-react";
 import {
   FormEvent,
+  CSSProperties,
   MouseEvent,
   PointerEvent as ReactPointerEvent,
   ReactNode,
+  useEffect,
+  useRef,
   useState,
 } from "react";
 import type { ContactField, ContactFieldErrors } from "@/lib/contact/validation";
+
+const heroPhoneSlides = [
+  {
+    src: "/assets/hero-reference/left-mockup.avif",
+    alt: "ParketShop harita ekranı",
+  },
+  {
+    src: "/assets/hero-reference/center-mockup.avif",
+    alt: "ParketShop ana ekranı",
+  },
+  {
+    src: "/assets/hero-reference/right-mockup.avif",
+    alt: "ParketShop rota ekranı",
+  },
+  {
+    src: "/assets/hero-reference/image-4-mockup.avif",
+    alt: "ParketShop mobil uygulama ekranı",
+  },
+  {
+    src: "/assets/hero-reference/image-5-mockup.avif",
+    alt: "ParketShop mobil deneyim ekranı",
+  },
+  {
+    src: "/assets/hero-reference/image-6-mockup.avif",
+    alt: "ParketShop mağaza ve AVM ekranı",
+  },
+];
 
 const pricingLinks = [
   { label: "Ücretsiz Paket", href: "#fiyat" },
@@ -304,48 +334,195 @@ export function HeroShapes() {
   );
 }
 
+function phonePosition(index: number, current: number, total: number) {
+  let offset = index - current;
+  if (offset > total / 2) offset -= total;
+  if (offset < total / -2) offset += total;
+
+  if (offset === 0) return "center";
+  if (offset === -1) return "left";
+  if (offset === 1) return "right";
+  if (offset === -2) return "far-left";
+  if (offset === 2) return "far-right";
+  return "back";
+}
+
+export function HeroPhoneCarousel() {
+  const [current, setCurrent] = useState(1);
+  const reduceMotion = useReducedMotion();
+
+  useEffect(() => {
+    const interval = window.setInterval(() => {
+      setCurrent((value) => (value + 1) % heroPhoneSlides.length);
+    }, 4000);
+
+    return () => window.clearInterval(interval);
+  }, []);
+
+  return (
+    <div
+      className="hero-phones-showcase"
+      aria-label="ParketShop uygulama ekranları"
+      data-reduce-motion={reduceMotion ? "true" : "false"}
+    >
+      {heroPhoneSlides.map((slide, index) => {
+        const position = phonePosition(index, current, heroPhoneSlides.length);
+
+        return (
+          <div
+            key={slide.src}
+            className="hero-phone"
+            data-position={position}
+            aria-hidden={position !== "center"}
+          >
+            <Image
+              src={slide.src}
+              alt={slide.alt}
+              width={935}
+              height={1944}
+              sizes="(max-width: 575px) 160px, (max-width: 767px) 190px, (max-width: 991px) 220px, (max-width: 1199px) 230px, (max-width: 1399px) 260px, 300px"
+              priority={index <= 2}
+            />
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 const gallerySlides = [
-  { src: "/assets/parking-screens.png", alt: "Boş park yeri seçimi ve park detayları ekranları", label: "Otopark" },
-  { src: "/assets/find-stop-app.png", alt: "ParketShop ana ekranı, araç konumu ve AVM harita ekranları", label: "Navigasyon" },
-  { src: "/assets/mall-screens.png", alt: "AVM içi kampanyalar ve mağaza ekranları", label: "Kampanyalar" },
+  { src: "/assets/slider-screens/screen-01.png", alt: "ParketShop ana ekranı", label: "Ana ekran" },
+  { src: "/assets/slider-screens/screen-02.png", alt: "ParketShop otopark ana ekranı", label: "Otopark" },
+  { src: "/assets/slider-screens/screen-03.png", alt: "ParketShop AVM otopark arama ekranı", label: "AVM arama" },
+  { src: "/assets/slider-screens/screen-04.png", alt: "ParketShop yakındaki alışveriş merkezleri haritası", label: "Harita" },
+  { src: "/assets/slider-screens/screen-05.png", alt: "ParketShop yakındaki alışveriş merkezleri detay ekranı", label: "AVM detay" },
+  { src: "/assets/slider-screens/screen-06.png", alt: "ParketShop alışveriş merkezi detay ekranı", label: "Mağazalar" },
+  { src: "/assets/slider-screens/screen-07.png", alt: "ParketShop park slot seçimi onay ekranı", label: "Park seçimi" },
+  { src: "/assets/slider-screens/screen-08.png", alt: "ParketShop otopark harita rota onay ekranı", label: "Rota onay" },
+  { src: "/assets/slider-screens/screen-09.png", alt: "ParketShop otopark rota bildirim ekranı", label: "Bildirim" },
+  { src: "/assets/slider-screens/screen-10.png", alt: "ParketShop otopark çıkış detay ekranı", label: "Çıkış" },
+  { src: "/assets/slider-screens/screen-11.png", alt: "ParketShop otopark dönüş canlı görünüm ekranı", label: "Canlı görünüm" },
+  { src: "/assets/slider-screens/screen-12.png", alt: "ParketShop sepet özet ekranı", label: "Sepet" },
 ];
 
 export function ScreenshotCarousel() {
-  const [current, setCurrent] = useState(1);
+  const [current, setCurrent] = useState(0);
+  const [drag, setDrag] = useState({ active: false, startX: 0, x: 0 });
+  const draggedRef = useRef(false);
+  const dragOffset = drag.active ? Math.max(-260, Math.min(260, drag.x - drag.startX)) : 0;
+  const slideCount = gallerySlides.length;
+
+  const goToSlide = (index: number) => {
+    setCurrent((index + slideCount) % slideCount);
+  };
+
+  const getOffset = (index: number) => {
+    let offset = index - current;
+    if (offset > slideCount / 2) offset -= slideCount;
+    if (offset < slideCount / -2) offset += slideCount;
+    return offset;
+  };
+
+  const getStateClass = (offset: number) => {
+    if (offset === 0) return "active";
+    if (offset === -1) return "prev-1";
+    if (offset === 1) return "next-1";
+    if (offset === -2) return "prev-2";
+    if (offset === 2) return "next-2";
+    if (offset === -3) return "prev-3";
+    if (offset === 3) return "next-3";
+    if (offset === -4) return "prev-4";
+    if (offset === 4) return "next-4";
+    return "is-hidden";
+  };
+
+  const handlePointerDown = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (event.button !== 0 && event.pointerType === "mouse") return;
+    draggedRef.current = false;
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setDrag({ active: true, startX: event.clientX, x: event.clientX });
+  };
+
+  const handlePointerMove = (event: ReactPointerEvent<HTMLDivElement>) => {
+    if (!drag.active) return;
+    if (Math.abs(event.clientX - drag.startX) > 8) draggedRef.current = true;
+    setDrag((value) => ({ ...value, x: event.clientX }));
+  };
+
+  const finishDrag = () => {
+    if (!drag.active) return;
+    const distance = dragOffset;
+    setDrag({ active: false, startX: 0, x: 0 });
+    if (Math.abs(distance) < 58) return;
+
+    const steps = Math.max(1, Math.min(2, Math.round(Math.abs(distance) / 130)));
+    goToSlide(current + (distance < 0 ? steps : -steps));
+  };
 
   return (
-    <div className="mt-12 md:mt-16">
-      <div className="relative mx-auto h-[360px] overflow-hidden sm:h-[480px] lg:h-[525px]">
+    <div className="screenshot-coverflow mt-12 md:mt-16">
+      <div
+        className={`screenshot-coverflow-stage ${drag.active ? "is-dragging" : ""}`}
+        style={{ "--drag-x": `${dragOffset}px` } as CSSProperties}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={finishDrag}
+        onPointerCancel={finishDrag}
+        onPointerLeave={finishDrag}
+        aria-label="ParketShop uygulama ekranları"
+      >
         {gallerySlides.map((slide, index) => {
-          let position = index - current;
-          if (position > 1) position -= gallerySlides.length;
-          if (position < -1) position += gallerySlides.length;
+          const offset = getOffset(index);
+          const stateClass = getStateClass(offset);
+
           return (
-            <motion.button
+            <button
               key={slide.label}
               type="button"
               aria-label={`${slide.label} ekranını göster`}
-              data-testid={position === 0 ? "active-gallery-slide" : undefined}
-              onClick={() => setCurrent(index)}
-              className="absolute left-1/2 top-0 h-full w-[310px] -translate-x-1/2 cursor-pointer sm:w-[440px] lg:w-[535px]"
-              animate={{ x: `${79 * position}%`, scale: position === 0 ? 1 : 0.78, opacity: position === 0 ? 1 : 0.44, zIndex: position === 0 ? 3 : 1 }}
-              transition={{ type: "spring", stiffness: 230, damping: 29 }}
+              aria-current={index === current}
+              data-testid={offset === 0 ? "active-gallery-slide" : undefined}
+              data-coverflow-position={stateClass}
+              className={`screenshot-coverflow-card ${stateClass}`}
+              onClick={(event) => {
+                if (draggedRef.current) {
+                  event.preventDefault();
+                  draggedRef.current = false;
+                  return;
+                }
+                goToSlide(index);
+              }}
             >
-              <Image src={slide.src} alt={slide.alt} fill sizes="(max-width: 640px) 310px, (max-width: 1024px) 440px, 535px" className="phone-shadow object-contain" />
-            </motion.button>
+              <Image
+                src={slide.src}
+                alt={slide.alt}
+                width={642}
+                height={1391}
+                sizes="(max-width: 640px) 218px, (max-width: 1024px) 286px, 360px"
+                priority={index < 5}
+                draggable={false}
+              />
+            </button>
           );
         })}
       </div>
-      <div className="mt-7 flex items-center justify-center gap-5">
-        <button type="button" onClick={() => setCurrent((value) => (value + gallerySlides.length - 1) % gallerySlides.length)} aria-label="Önceki ekran" className="grid h-11 w-11 place-items-center rounded-full border border-[#e6eaf2] text-ink transition-colors hover:border-brand hover:text-brand">
+      <div className="screenshot-coverflow-nav">
+        <button type="button" onClick={() => goToSlide(current - 1)} aria-label="Önceki ekran" className="screenshot-coverflow-arrow">
           <ChevronLeft className="h-5 w-5" />
         </button>
-        <div className="flex gap-2.5" aria-label="Galeri sayfaları">
+        <div className="screenshot-coverflow-dots" aria-label="Galeri sayfaları">
           {gallerySlides.map((slide, index) => (
-            <button key={slide.label} type="button" aria-label={`${slide.label} ekranları`} aria-current={index === current} onClick={() => setCurrent(index)} className={`h-2.5 rounded-full transition-all ${index === current ? "w-7 bg-brand" : "w-2.5 bg-[#d8dde7]"}`} />
+            <button
+              key={slide.label}
+              type="button"
+              aria-label={`${slide.label} ekranları`}
+              aria-current={index === current}
+              onClick={() => goToSlide(index)}
+              className="screenshot-coverflow-dot"
+            />
           ))}
         </div>
-        <button type="button" onClick={() => setCurrent((value) => (value + 1) % gallerySlides.length)} aria-label="Sonraki ekran" className="grid h-11 w-11 place-items-center rounded-full border border-[#e6eaf2] text-ink transition-colors hover:border-brand hover:text-brand">
+        <button type="button" onClick={() => goToSlide(current + 1)} aria-label="Sonraki ekran" className="screenshot-coverflow-arrow">
           <ChevronRight className="h-5 w-5" />
         </button>
       </div>
