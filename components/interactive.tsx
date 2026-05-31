@@ -631,10 +631,10 @@ type ContactSubmitResponse = {
 };
 
 const contactInputClass =
-  "h-[48px] rounded-md bg-white px-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-70";
+  "h-[48px] rounded-[18px] bg-white/15 px-4 text-sm font-semibold text-white outline-none shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] transition-colors placeholder:text-white/70 focus:bg-white/20 focus:ring-2 focus:ring-white/35 disabled:cursor-not-allowed disabled:opacity-70";
 
 const contactTextareaClass =
-  "w-full resize-none rounded-md bg-white p-4 text-sm text-ink outline-none placeholder:text-[#9da3af] focus:ring-2 focus:ring-white/50 disabled:cursor-not-allowed disabled:opacity-70";
+  "w-full resize-none rounded-[18px] bg-white/15 p-4 text-sm font-semibold text-white outline-none shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)] transition-colors placeholder:text-white/70 focus:bg-white/20 focus:ring-2 focus:ring-white/35 disabled:cursor-not-allowed disabled:opacity-70";
 
 function contactErrorId(field: ContactField) {
   return `contact-${field}-error`;
@@ -662,16 +662,32 @@ export function ContactForm() {
   const [fieldErrors, setFieldErrors] = useState<ContactFieldErrors>({});
   const [startedAt, setStartedAt] = useState(() => Date.now());
   const isSubmitting = status === "submitting";
+  const isSubmitted = status === "success";
+
+  useEffect(() => {
+    if (!isSubmitted) return;
+
+    const timeoutId = window.setTimeout(() => {
+      setStatus("idle");
+      setMessage("");
+    }, 5000);
+
+    return () => window.clearTimeout(timeoutId);
+  }, [isSubmitted]);
 
   const inputClass = (field: ContactField, baseClass = contactInputClass) =>
     `${baseClass} w-full ${
-      fieldErrors[field] ? "border-2 border-[#f97316] ring-4 ring-[#fed7aa]" : "border-0"
+      fieldErrors[field] ? "border-2 border-[#fed7aa] ring-4 ring-white/20" : "border-0"
     }`;
 
   const statusMessageClass =
     status === "success"
-      ? "border border-[#86efac] bg-[#15803d] text-white shadow-[0_12px_28px_rgba(21,128,61,0.28)]"
+      ? "inline-flex w-fit items-center justify-center gap-2 rounded-full border-0 bg-[#22c55e] px-8 py-3 text-white shadow-[0_14px_32px_rgba(16,185,129,0.24)]"
       : "border border-[#fecaca] bg-[#7f1d1d] text-white shadow-[0_12px_28px_rgba(127,29,29,0.22)]";
+
+  const submitButtonClass = isSubmitted
+    ? "relative z-10 mt-5 flex h-[48px] w-fit min-w-[178px] items-center justify-center gap-2 rounded-full bg-[#22c55e] px-8 text-sm font-extrabold text-white shadow-[0_14px_32px_rgba(16,185,129,0.24)] transition-colors hover:bg-[#22c55e] disabled:cursor-default disabled:opacity-100"
+    : "relative z-10 mt-5 flex h-[48px] w-fit items-center justify-center gap-2 rounded-full bg-white px-8 text-sm font-extrabold text-[#ed0033] shadow-[0_14px_32px_rgba(121,0,22,0.14)] transition-colors hover:bg-[#fff5f7] disabled:cursor-not-allowed disabled:opacity-75";
 
   const submit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -720,16 +736,20 @@ export function ContactForm() {
   };
 
   return (
-    <form onSubmit={submit} className="relative rounded-2xl bg-brand-deep p-7 text-white sm:p-10" noValidate>
-      <h3 className="text-[26px] font-extrabold leading-tight tracking-[-0.04em]">Herhangi Bir Sorunuz Var mı?</h3>
-      <p className="mt-4 text-[14px] leading-7 text-white/76">Sorunuzu bize yazın; ekibimiz en kısa sürede sizinle iletişime geçsin.</p>
+    <form
+      onSubmit={submit}
+      className="relative isolate overflow-hidden rounded-[40px] bg-gradient-to-br from-[#f20736] via-[#ed0033] to-[#d90019] p-7 text-white shadow-[0_24px_70px_rgba(213,31,42,0.18)] before:pointer-events-none before:absolute before:-right-16 before:-top-24 before:z-0 before:h-[290px] before:w-[290px] before:rounded-full before:border before:border-white/20 after:pointer-events-none after:absolute after:-right-5 after:-top-32 after:z-0 after:h-[210px] after:w-[210px] after:rounded-full after:border after:border-white/20 sm:p-10"
+      noValidate
+    >
+      <h3 className="relative z-10 text-[26px] font-extrabold leading-tight tracking-[-0.04em]">Herhangi Bir Sorunuz Var mı?</h3>
+      <p className="relative z-10 mt-4 text-[14px] leading-7 text-white/85">Sorunuzu bize yazın; ekibimiz en kısa sürede sizinle iletişime geçsin.</p>
 
       <div className="absolute left-[-10000px] top-auto h-px w-px overflow-hidden" aria-hidden="true">
         <label htmlFor="website">Website</label>
         <input id="website" name="website" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div className="mt-7 grid gap-3 sm:grid-cols-2">
+      <div className="relative z-10 mt-7 grid gap-3 sm:grid-cols-2">
         <div>
           <label className="sr-only" htmlFor="name">Adınız</label>
           <input
@@ -767,7 +787,7 @@ export function ContactForm() {
         </div>
       </div>
 
-      <div className="mt-3">
+      <div className="relative z-10 mt-3">
         <label className="sr-only" htmlFor="email">E-posta</label>
         <input
           id="email"
@@ -785,7 +805,7 @@ export function ContactForm() {
         <ContactFieldError field="email" message={fieldErrors.email} />
       </div>
 
-      <div className="mt-3">
+      <div className="relative z-10 mt-3">
         <label className="sr-only" htmlFor="message">Mesajınız</label>
         <textarea
           id="message"
@@ -805,13 +825,21 @@ export function ContactForm() {
 
       <button
         type="submit"
-        disabled={isSubmitting}
-        className="mx-auto mt-5 flex h-[48px] items-center justify-center gap-2 rounded-md bg-ink px-8 text-sm font-bold text-white transition-colors hover:bg-[#252a37] disabled:cursor-not-allowed disabled:opacity-75"
+        disabled={isSubmitting || isSubmitted}
+        className={submitButtonClass}
       >
-        {isSubmitting ? "Gönderiliyor..." : "Mesajınızı Gönderin"} {status === "success" ? <Check className="h-4 w-4" /> : <Send className="h-4 w-4" />}
+        {isSubmitted ? (
+          <>
+            <Check className="h-4 w-4" /> Gönderildi
+          </>
+        ) : (
+          <>
+            {isSubmitting ? "Gönderiliyor..." : "Mesajınızı Gönderin"} <Send className="h-4 w-4" />
+          </>
+        )}
       </button>
 
-      <div className="min-h-[38px]">
+      <div className="relative z-10 min-h-[38px]">
         <AnimatePresence mode="wait">
           {message ? (
             <motion.p
@@ -822,6 +850,7 @@ export function ContactForm() {
               role={status === "error" ? "alert" : "status"}
               className={`mt-4 rounded-md px-3 py-2 text-center text-sm font-extrabold ${statusMessageClass}`}
             >
+              {isSubmitted ? <Check className="h-4 w-4" /> : null}
               {message}
             </motion.p>
           ) : null}
