@@ -13,6 +13,9 @@ export const metadata: Metadata = {
   title: "ParketShop | AVM Deneyiminizin Akıllı Asistanı",
   description:
     "Boş park yeri bulma, araç konumu, AVM içi navigasyon ve kampanyalar tek uygulamada.",
+  verification: {
+    google: "oT-0yTaG5-91X0cj9SDtmO5PCSulh37Sjz1lSHlSH8c",
+  },
 };
 
 export default function RootLayout({
