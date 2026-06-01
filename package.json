@@ -8,11 +8,13 @@
     "start": "NEXT_DIST_DIR=.next-build next start"
   },
   "dependencies": {
+    "@remotion/player": "^4.0.470",
     "framer-motion": "^12.15.0",
     "lucide-react": "^0.511.0",
     "next": "^15.3.3",
     "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "react-dom": "^19.0.0",
+    "remotion": "^4.0.470"
   },
   "overrides": {
     "postcss": "^8.5.10"
