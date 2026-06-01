@@ -139,7 +139,7 @@ export function DownloadSection() {
 export function Footer() {
   return (
     <footer className="border-t border-[#f0ede7] bg-[#fcfbf8]">
-      <div className="page-container grid gap-11 py-[62px] sm:grid-cols-2 lg:grid-cols-[1.55fr_0.8fr_0.9fr_0.9fr_1fr]">
+      <div className="page-container grid gap-11 py-[62px] sm:grid-cols-2 lg:grid-cols-[1.55fr_0.8fr_0.9fr_0.9fr]">
         <div className="max-w-[270px]">
           <Image
             src="/assets/parketshop-logo.svg"
@@ -181,7 +181,7 @@ export function Footer() {
             <a className="block hover:text-brand" href="/avm-ici#canli-navigasyon">Canlı Navigasyon</a>
           </div>
         </div>
-        <div>
+        <div className="hidden">
           <p className="text-[14px] font-extrabold">Uygulamayı İndir</p>
           <div className="mt-5">
             <StoreBadges small />
@@ -190,7 +190,7 @@ export function Footer() {
       </div>
       <div className="page-container flex flex-col items-center justify-between gap-4 border-t border-dashed border-[#e9e3db] py-7 text-[12px] text-muted sm:flex-row">
         <p>© Copyright 2026 ParketShop. Tüm hakları saklıdır.</p>
-        <div className="flex items-center gap-5">
+        <div className="hidden flex items-center gap-5">
           <a href="#" className="hover:text-brand">Gizlilik Politikası</a>
           <a href="#" className="hover:text-brand">Kullanım Koşulları</a>
         </div>
