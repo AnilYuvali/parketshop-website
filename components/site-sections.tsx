@@ -159,7 +159,7 @@ export function Footer() {
             <a className="block hover:text-brand" href="/#hero">Ana Sayfa</a>
             <a className="block hover:text-brand" href="/avm-otopark">AVM Otopark</a>
             <a className="block hover:text-brand" href="/avm-ici">AVM İçi</a>
-            <a className="block hover:text-brand" href="/#hakkinda">Hakkında</a>
+            <a className="block hover:text-brand" href="/hakkimizda">Hakkımızda</a>
             <a className="block hover:text-brand" href="/iletisim">İletişim</a>
           </div>
         </div>
@@ -174,7 +174,7 @@ export function Footer() {
         <div>
           <p className="text-[14px] font-extrabold">Keşfedin</p>
           <div className="mt-5 space-y-3 text-[13px] text-muted">
-            <a className="block hover:text-brand" href="/#hakkinda">Hakkımızda</a>
+            <a className="block hover:text-brand" href="/hakkimizda">Hakkımızda</a>
             <a className="block hover:text-brand" href="/#iletisim">SSS</a>
             <a className="block hover:text-brand" href="/iletisim">İletişim</a>
           </div>
