@@ -4,7 +4,6 @@ import {
   BadgePercent,
   CheckCircle2,
   MapPinned,
-  Play,
 } from "lucide-react";
 import {
   ContactForm,
@@ -15,6 +14,7 @@ import {
   Reveal,
   ScreenshotCarousel,
   TiltImage,
+  VideoModalButton,
 } from "@/components/interactive";
 import { DownloadSection, Footer, SectionHeading } from "@/components/site-sections";
 
@@ -103,7 +103,7 @@ export default function HomePage() {
                   <div className="hero-reference-buttons">
                     <a href="#indir" aria-label="App Store" title="App Store">
                       <Image
-                        src="/assets/hero-reference/app-store-button.png"
+                        src="/assets/hero-reference/app-store-button.webp"
                         width={2500}
                         height={814}
                         alt="App Store"
@@ -111,7 +111,7 @@ export default function HomePage() {
                     </a>
                     <a href="#indir" aria-label="Play Store" title="Play Store">
                       <Image
-                        src="/assets/hero-reference/google-play-button.png"
+                        src="/assets/hero-reference/google-play-button.webp"
                         width={2500}
                         height={814}
                         alt="Google Play"
@@ -173,12 +173,7 @@ export default function HomePage() {
                 ))}
               </ul>
               <div className="mt-10 flex flex-wrap items-center gap-7">
-                <a href="#ekranlar" className="flex items-center gap-3 text-sm font-semibold text-ink">
-                  <span className="grid h-11 w-11 place-items-center rounded-full border border-[#f0d1d4] text-brand">
-                    <Play className="ml-0.5 h-4 w-4 fill-current" />
-                  </span>
-                  Tanıtım videosu
-                </a>
+                <VideoModalButton />
               </div>
             </Reveal>
             <Reveal delay={0.1} className="relative hidden justify-center lg:flex">
@@ -293,8 +288,8 @@ export default function HomePage() {
                   </div>
                 </div>
               </div>
-              <a className="primary-button mt-10 gap-2" href="#indir">
-                Hemen indir <ArrowRight className="h-4 w-4" />
+              <a className="primary-button mt-10 gap-2" href="/avm-ici">
+                Keşfet <ArrowRight className="h-4 w-4" />
               </a>
             </Reveal>
           </div>

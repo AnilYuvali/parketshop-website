@@ -11,11 +11,13 @@ import {
 } from "framer-motion";
 import {
   Check,
+  ChevronDown,
   ChevronLeft,
   ChevronRight,
   House,
   Menu,
   Minus,
+  Play,
   Plus,
   Send,
   X,
@@ -59,18 +61,144 @@ const heroPhoneSlides = [
   },
 ];
 
-const navigation = [
-  { label: "Ana Sayfa", href: "/#hero", icon: "home" },
-  { label: "AVM Otopark", href: "/avm-otopark" },
-  { label: "AVM İçi", href: "/avm-ici" },
+type NavDropdownItem = { label: string; href: string };
+
+type NavItem = {
+  label: string;
+  href: string;
+  icon?: string;
+  dropdown?: NavDropdownItem[];
+};
+
+const navigation: NavItem[] = [
+  { label: "Ana Sayfa", href: "/", icon: "home" },
+  {
+    label: "AVM Otopark",
+    href: "/avm-otopark",
+    dropdown: [
+      { label: "Otopark Doluluk Oranı", href: "/avm-otopark#doluluk" },
+      { label: "Boş Park Yeri Bulma", href: "/avm-otopark#akilli-park-yeri" },
+      { label: "Araç Konum Kaydetme", href: "/avm-otopark#arac-konumu" },
+      { label: "Otopark Ücret Ödeme", href: "/avm-otopark#odeme" },
+    ],
+  },
+  {
+    label: "AVM İçi",
+    href: "/avm-ici",
+    dropdown: [
+      { label: "Kampanyalar", href: "/avm-ici#kampanyalar" },
+      { label: "AI Push Bildirimleri", href: "/avm-ici#ai-bildirimleri" },
+      { label: "Markalar", href: "/avm-ici#markalar" },
+      { label: "Canlı Navigasyon", href: "/avm-ici#canli-navigasyon" },
+    ],
+  },
   { label: "Hakkımızda", href: "/hakkimizda" },
   { label: "İletişim", href: "/iletisim" },
 ];
+
+const promoVideoEmbedUrl =
+  "https://www.youtube.com/embed/XMFNv8YVmJk?autoplay=1&rel=0&modestbranding=1";
+
+export function VideoModalButton() {
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [isOpen]);
+
+  return (
+    <>
+      <button
+        type="button"
+        aria-haspopup="dialog"
+        aria-expanded={isOpen}
+        onClick={() => setIsOpen(true)}
+        className="group flex items-center gap-3 text-sm font-semibold text-ink transition-colors hover:text-brand"
+      >
+        <span className="grid h-11 w-11 place-items-center rounded-full border border-[#f0d1d4] text-brand transition-colors group-hover:border-brand">
+          <Play className="ml-0.5 h-4 w-4 fill-current" />
+        </span>
+        Tanıtım videosu
+      </button>
+
+      <AnimatePresence>
+        {isOpen ? (
+          <motion.div
+            className="fixed inset-0 z-[100] grid place-items-center bg-[#111827]/75 px-4 py-6 backdrop-blur-sm"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="promo-video-title"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onMouseDown={(event) => {
+              if (event.target === event.currentTarget) setIsOpen(false);
+            }}
+          >
+            <motion.div
+              className="w-full max-w-4xl overflow-hidden rounded-[28px] border border-white/15 bg-white shadow-[0_30px_90px_rgba(0,0,0,0.35)]"
+              initial={{ opacity: 0, y: 18, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: 12, scale: 0.98 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <div className="flex items-center justify-between gap-4 border-b border-[#eef1f5] px-5 py-4 sm:px-6">
+                <div>
+                  <p className="text-xs font-extrabold uppercase tracking-[0.14em] text-brand">
+                    ParketShop
+                  </p>
+                  <h2 id="promo-video-title" className="mt-1 text-lg font-extrabold text-ink sm:text-xl">
+                    Tanıtım videosu
+                  </h2>
+                </div>
+                <button
+                  type="button"
+                  aria-label="Videoyu kapat"
+                  onClick={() => setIsOpen(false)}
+                  className="grid h-10 w-10 shrink-0 place-items-center rounded-full border border-[#e8ebf1] bg-white text-ink transition-colors hover:border-brand hover:text-brand"
+                >
+                  <X className="h-5 w-5" />
+                </button>
+              </div>
+
+              <div className="bg-[#0b1020] p-2 sm:p-3">
+                <div className="aspect-video overflow-hidden rounded-[18px] bg-black">
+                  <iframe
+                    className="h-full w-full"
+                    src={promoVideoEmbedUrl}
+                    title="ParketShop tanıtım videosu"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        ) : null}
+      </AnimatePresence>
+    </>
+  );
+}
 
 export function Header() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [isSticky, setIsSticky] = useState(false);
   const [pendingMobileTarget, setPendingMobileTarget] = useState<string | null>(null);
+  const [openMobileDropdown, setOpenMobileDropdown] = useState<string | null>(null);
   const pathname = usePathname();
   const { scrollY } = useScroll();
   const useLightInitialHeader = pathname === "/avm-otopark" && !isSticky;
@@ -81,6 +209,7 @@ export function Header() {
 
   const closeMobileAndNavigate = (event: MouseEvent<HTMLAnchorElement>, href: string) => {
     setMobileOpen(false);
+    setOpenMobileDropdown(null);
 
     const samePageHash =
       href.startsWith("#")
@@ -110,7 +239,7 @@ export function Header() {
         }`}
       >
         <div className={`header-content flex items-center justify-between ${isSticky ? "h-16" : "h-[76px]"}`}>
-          <a href="/#hero" aria-label="ParketShop ana sayfa">
+          <a href="/" aria-label="ParketShop ana sayfa">
             <Image
               src={
                 useLightInitialHeader
@@ -129,23 +258,55 @@ export function Header() {
               useLightInitialHeader ? "text-white" : "text-ink"
             }`}
           >
-            {navigation.map((item) => (
-              <a
-                key={item.label}
-                className={`transition-colors ${useLightInitialHeader ? "hover:text-white/80" : "hover:text-brand"} ${
-                  item.icon === "home"
-                    ? `grid h-10 w-10 place-items-center rounded-full ${
-                        useLightInitialHeader ? "hover:bg-white/10" : "hover:bg-[#fff4f4]"
-                      }`
-                    : "py-7"
-                }`}
-                href={item.href}
-                aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}
-                title={item.icon === "home" ? "Ana sayfa" : undefined}
-              >
-                {item.icon === "home" ? <House className="h-[18px] w-[18px]" strokeWidth={2.2} /> : item.label}
-              </a>
-            ))}
+            {navigation.map((item) =>
+              item.dropdown ? (
+                <div key={item.label} className="group relative">
+                  <a
+                    href={item.href}
+                    className={`flex items-center gap-1.5 py-7 transition-colors ${
+                      useLightInitialHeader ? "hover:text-white/80" : "hover:text-brand"
+                    }`}
+                    aria-haspopup="true"
+                  >
+                    {item.label}
+                    <ChevronDown
+                      className="h-4 w-4 transition-transform duration-200 group-hover:rotate-180 group-focus-within:rotate-180"
+                      strokeWidth={2.4}
+                    />
+                  </a>
+                  <div className="invisible absolute left-1/2 top-full z-50 w-max -translate-x-1/2 translate-y-1 pt-1 opacity-0 transition-[opacity,transform] duration-200 group-hover:visible group-hover:translate-y-0 group-hover:opacity-100 group-focus-within:visible group-focus-within:translate-y-0 group-focus-within:opacity-100">
+                    <ul className="min-w-[232px] rounded-2xl border border-[#eef1f5] bg-white p-2 text-ink shadow-[0_18px_42px_rgba(21,24,36,0.16)]">
+                      {item.dropdown.map((sub) => (
+                        <li key={sub.href}>
+                          <a
+                            href={sub.href}
+                            className="block rounded-xl px-4 py-2.5 text-[13.5px] font-semibold text-ink transition-colors hover:bg-[#fff4f4] hover:text-brand"
+                          >
+                            {sub.label}
+                          </a>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              ) : (
+                <a
+                  key={item.label}
+                  className={`transition-colors ${useLightInitialHeader ? "hover:text-white/80" : "hover:text-brand"} ${
+                    item.icon === "home"
+                      ? `grid h-10 w-10 place-items-center rounded-full ${
+                          useLightInitialHeader ? "hover:bg-white/10" : "hover:bg-[#fff4f4]"
+                        }`
+                      : "py-7"
+                  }`}
+                  href={item.href}
+                  aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}
+                  title={item.icon === "home" ? "Ana sayfa" : undefined}
+                >
+                  {item.icon === "home" ? <House className="h-[18px] w-[18px]" strokeWidth={2.2} /> : item.label}
+                </a>
+              ),
+            )}
           </nav>
           <button
             className={`grid h-11 w-11 place-items-center rounded-full border transition-colors lg:hidden ${
@@ -154,7 +315,12 @@ export function Header() {
             type="button"
             aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
             aria-expanded={mobileOpen}
-            onClick={() => setMobileOpen((open) => !open)}
+            onClick={() =>
+              setMobileOpen((open) => {
+                if (open) setOpenMobileDropdown(null);
+                return !open;
+              })
+            }
           >
             {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
           </button>
@@ -178,17 +344,73 @@ export function Header() {
             }`}
           >
             <div className="flex flex-col px-5 py-3">
-              {navigation.map((item) => (
-                <a
-                  key={item.label}
-                  href={item.href}
-                  className="flex items-center justify-between py-3.5 text-sm font-semibold"
-                  onClick={(event) => closeMobileAndNavigate(event, item.href)}
-                  aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}
-                >
-                  {item.icon === "home" ? <House className="h-[18px] w-[18px]" strokeWidth={2.2} /> : item.label}
-                </a>
-              ))}
+              {navigation.map((item) =>
+                item.dropdown ? (
+                  <div key={item.label}>
+                    <div className="flex items-center justify-between">
+                      <a
+                        href={item.href}
+                        className="flex-1 py-3.5 text-sm font-semibold"
+                        onClick={(event) => closeMobileAndNavigate(event, item.href)}
+                      >
+                        {item.label}
+                      </a>
+                      <button
+                        type="button"
+                        aria-label={`${item.label} alt menüsünü ${
+                          openMobileDropdown === item.label ? "kapat" : "aç"
+                        }`}
+                        aria-expanded={openMobileDropdown === item.label}
+                        onClick={() =>
+                          setOpenMobileDropdown((current) =>
+                            current === item.label ? null : item.label,
+                          )
+                        }
+                        className="-mr-1 grid h-9 w-9 place-items-center rounded-full text-ink transition-colors hover:bg-[#fff4f4]"
+                      >
+                        <ChevronDown
+                          className={`h-4 w-4 transition-transform duration-200 ${
+                            openMobileDropdown === item.label ? "rotate-180" : ""
+                          }`}
+                          strokeWidth={2.4}
+                        />
+                      </button>
+                    </div>
+                    <AnimatePresence initial={false}>
+                      {openMobileDropdown === item.label ? (
+                        <motion.ul
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          className="overflow-hidden"
+                        >
+                          {item.dropdown.map((sub) => (
+                            <li key={sub.href}>
+                              <a
+                                href={sub.href}
+                                className="block py-2.5 pl-4 text-[13.5px] font-semibold text-muted transition-colors hover:text-brand"
+                                onClick={(event) => closeMobileAndNavigate(event, sub.href)}
+                              >
+                                {sub.label}
+                              </a>
+                            </li>
+                          ))}
+                        </motion.ul>
+                      ) : null}
+                    </AnimatePresence>
+                  </div>
+                ) : (
+                  <a
+                    key={item.label}
+                    href={item.href}
+                    className="flex items-center justify-between py-3.5 text-sm font-semibold"
+                    onClick={(event) => closeMobileAndNavigate(event, item.href)}
+                    aria-label={item.icon === "home" ? "Ana sayfaya dön" : undefined}
+                  >
+                    {item.icon === "home" ? <House className="h-[18px] w-[18px]" strokeWidth={2.2} /> : item.label}
+                  </a>
+                ),
+              )}
               <a
                 href="#indir"
                 className="primary-button mt-2 w-full"

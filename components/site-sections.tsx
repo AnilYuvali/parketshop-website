@@ -95,7 +95,7 @@ export function DownloadSection() {
                 <path d="M16.55 12.09c-.02-2.28 1.87-3.39 1.96-3.44-1.06-1.55-2.7-1.76-3.28-1.78-1.38-.15-2.73.83-3.44.83-.72 0-1.8-.81-2.96-.79-1.49.02-2.89.89-3.66 2.25-1.58 2.74-.4 6.77 1.12 8.98.76 1.08 1.64 2.29 2.8 2.25 1.13-.05 1.55-.72 2.91-.72 1.35 0 1.73.72 2.91.69 1.21-.02 1.97-1.09 2.7-2.18.87-1.24 1.22-2.44 1.23-2.5-.03-.01-2.27-.87-2.29-3.59ZM14.33 5.4c.61-.76 1.02-1.79.91-2.84-.89.04-2 .62-2.64 1.37-.57.66-1.07 1.73-.94 2.74 1 .08 2.03-.51 2.67-1.27Z" />
               </svg>
               <span className="text-left leading-none">
-                <span className="block text-[11px] font-semibold lg:text-[clamp(8px,0.62vw,13px)]">Hemen İndirin</span>
+                <span className="block text-[11px] font-semibold lg:text-[clamp(8px,0.62vw,13px)]">Çok Yakında...</span>
                 <span className="mt-1 block text-[21px] font-semibold tracking-[-0.03em] lg:text-[clamp(15px,1.28vw,26px)]">
                   App Store
                 </span>
@@ -113,7 +113,7 @@ export function DownloadSection() {
                 <path fill="#F53347" d="M3.4 21.6 13.8 12l3.45 3.2-12.02 6.62c-.76.43-1.42.31-1.83-.22Z" />
               </svg>
               <span className="text-left leading-none">
-                <span className="block text-[11px] font-semibold lg:text-[clamp(8px,0.62vw,13px)]">Hemen İndirin</span>
+                <span className="block text-[11px] font-semibold lg:text-[clamp(8px,0.62vw,13px)]">Çok Yakında...</span>
                 <span className="mt-1 block whitespace-nowrap text-[21px] font-semibold tracking-[-0.03em] lg:text-[clamp(15px,1.28vw,26px)]">
                   Google Play
                 </span>
@@ -156,7 +156,7 @@ export function Footer() {
         <div>
           <p className="text-[14px] font-extrabold">Yararlı Linkler</p>
           <div className="mt-5 space-y-3 text-[13px] text-muted">
-            <a className="block hover:text-brand" href="/#hero">Ana Sayfa</a>
+            <a className="block hover:text-brand" href="/">Ana Sayfa</a>
             <a className="block hover:text-brand" href="/avm-otopark">AVM Otopark</a>
             <a className="block hover:text-brand" href="/avm-ici">AVM İçi</a>
             <a className="block hover:text-brand" href="/hakkimizda">Hakkımızda</a>
@@ -164,19 +164,21 @@ export function Footer() {
           </div>
         </div>
         <div>
-          <p className="text-[14px] font-extrabold">AVM Deneyimi</p>
+          <p className="text-[14px] font-extrabold">AVM Otopark</p>
           <div className="mt-5 space-y-3 text-[13px] text-muted">
-            <a className="block hover:text-brand" href="/avm-otopark">Otopark</a>
-            <a className="block hover:text-brand" href="/#ekranlar">Navigasyon</a>
-            <a className="block hover:text-brand" href="/avm-ici#kampanyalar">Kampanyalar</a>
+            <a className="block hover:text-brand" href="/avm-otopark#doluluk">Otopark Doluluk Oranı</a>
+            <a className="block hover:text-brand" href="/avm-otopark#akilli-park-yeri">Boş Park Yeri Bulma</a>
+            <a className="block hover:text-brand" href="/avm-otopark#arac-konumu">Araç Konum Kaydetme</a>
+            <a className="block hover:text-brand" href="/avm-otopark#odeme">Otopark Ücret Ödeme</a>
           </div>
         </div>
         <div>
-          <p className="text-[14px] font-extrabold">Keşfedin</p>
+          <p className="text-[14px] font-extrabold">AVM İçi</p>
           <div className="mt-5 space-y-3 text-[13px] text-muted">
-            <a className="block hover:text-brand" href="/hakkimizda">Hakkımızda</a>
-            <a className="block hover:text-brand" href="/#iletisim">SSS</a>
-            <a className="block hover:text-brand" href="/iletisim">İletişim</a>
+            <a className="block hover:text-brand" href="/avm-ici#kampanyalar">Kampanyalar</a>
+            <a className="block hover:text-brand" href="/avm-ici#ai-bildirimleri">AI Push Bildirimleri</a>
+            <a className="block hover:text-brand" href="/avm-ici#markalar">Markalar</a>
+            <a className="block hover:text-brand" href="/avm-ici#canli-navigasyon">Canlı Navigasyon</a>
           </div>
         </div>
         <div>
