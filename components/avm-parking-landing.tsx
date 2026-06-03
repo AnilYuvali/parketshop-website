@@ -36,9 +36,9 @@ const occupancyStats = [
 ];
 
 const floorOccupancy = [
-  { floor: "1. Kat", distance: "Girişe 10 m", rate: 18, color: "#6356f0" },
-  { floor: "2. Kat", distance: "Girişe 35 m", rate: 32, color: "#f6b700" },
-  { floor: "3. Kat", distance: "Girişe 62 m", rate: 54, color: "#ed0033" },
+  { floor: "1. Kat", distance: "Girişe 10 m", rate: 97, color: "#6356f0" },
+  { floor: "2. Kat", distance: "Girişe 35 m", rate: 93, color: "#f6b700" },
+  { floor: "3. Kat", distance: "Girişe 62 m", rate: 90, color: "#ed0033" },
 ];
 
 const aiFactors = [
@@ -284,7 +284,7 @@ function AiParkingMap() {
       <div className="ai-map-topbar">
         <div>
           <p className="text-xs font-extrabold uppercase text-white/55">AI önerisi</p>
-          <h3 className="mt-1 text-2xl font-extrabold text-white">A-02 en ideal boş alan</h3>
+          <h3 className="mt-1 text-2xl font-extrabold text-white">B-11 en ideal boş alan</h3>
         </div>
         <div className="flex items-center gap-2 rounded-full bg-white/10 px-3 py-2 text-xs font-extrabold text-white">
           <Radar className="h-4 w-4 text-[#58c5ff]" />
@@ -294,7 +294,8 @@ function AiParkingMap() {
 
       <div className="ai-map-canvas">
         <svg className="ai-route-svg" viewBox="0 0 560 340" aria-hidden="true">
-          <path d="M66 294 H280 V150 V145 H467 V125" />
+          <path className="ai-route-desktop" d="M66 294 H280 V150 V145 H467 V125" />
+          <path className="ai-route-mobile" d="M140 490 H280 V150 V120 H370 V120" />
         </svg>
         <div className="map-entry">
           <svg className="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -322,7 +323,7 @@ function AiParkingMap() {
           <strong>10 metre</strong>
         </div>
         <div>
-          <span className="text-white/55">Manuel arama</span>
+          <span className="text-white/55">Manuel seçim</span>
           <strong>Gerekmez</strong>
         </div>
       </div>
@@ -430,8 +431,8 @@ export function AvmParkingLanding() {
         <section className="border-b border-[#eef1f5] bg-white">
           <div className="page-container grid gap-5 py-8 sm:grid-cols-3">
             {[
-              ["97 boş yer", "AVM’ye varmadan önce müsait park kapasitesi"],
-              ["15 dk daha kısa", "Otopark içinde manuel tur atma süresi azalır"],
+              ["Boş parkları gösterir", "AVM’ye varmadan önce müsait park kapasitesi"],
+              ["Zaman kazandırır", "Otopark içinde manuel tur atma süresi azalır"],
               ["Tek uygulama", "Rota, araç konumu ve ödeme aynı akışta"],
             ].map(([value, text]) => (
               <div key={value} className="flex items-center gap-4 rounded-[18px] bg-[#f8fafc] p-5">
@@ -518,8 +519,8 @@ export function AvmParkingLanding() {
                   />
                   <div className="vehicle-location-data">
                     <span>Kaydedilen konum</span>
-                    <strong>A-02</strong>
-                    <p>1. Kat · Kolon A · canlı dönüş rotası hazır</p>
+                    <strong>B-11</strong>
+                    <p>3. Kat · Kolon B · rota hazır</p>
                   </div>
                 </div>
                 <div className="return-route-card">
@@ -587,40 +588,13 @@ export function AvmParkingLanding() {
           </div>
         </section>
 
-        <section id="ai-karar-motoru" className="scroll-mt-24 py-20 sm:py-24 lg:py-28">
-          <div className="page-container">
-            <Reveal>
-              <SectionIntro
-                label="AI highlight"
-                title="ParketShop, otopark verisini kullanıcı faydasına çevirir."
-                text="AVM yönetimi için operasyonel görünürlük, ziyaretçi için daha hızlı ve stressiz bir otopark deneyimi. Aynı veri akışı hem yoğunluğu anlamlandırır hem de kullanıcıya en doğru aksiyonu önerir."
-                align="center"
-              />
-            </Reveal>
-            <Reveal delay={0.08} className="mt-12">
-              <div className="ai-engine-panel">
-                <div className="ai-engine-core">
-                  <BrainCircuit className="h-12 w-12 text-white" />
-                  <strong>A-02 önerildi</strong>
-                  <span>En kısa rota · düşük yoğunluk · hedefe yakın</span>
-                </div>
-                <div className="ai-engine-grid">
-                  {aiFactors.map((factor) => (
-                    <FactorCard key={factor.title} {...factor} />
-                  ))}
-                </div>
-              </div>
-            </Reveal>
-          </div>
-        </section>
-
         <section id="kullanici-akisi" className="scroll-mt-24 bg-[#f7f9fc] py-20 sm:py-24 lg:py-28">
           <div className="page-container">
             <Reveal>
               <SectionIntro
                 label="Kullanıcı akışı"
                 title="AVM’ye varıştan çıkışa kadar tek, akıcı deneyim."
-                text="Remotion mantığındaki sahne akışı gibi tasarlanan bu yolculuk, kullanıcının her adımda ne yapacağını netleştirir: yoğunluğu görür, AI’a bırakır, park eder, kaydeder, geri döner ve öder."
+                text="Ziyaretçinin AVM yolculuğu: yoğunluğu görür, AI’a bırakır, park eder, araç konumunu kaydeder, harita üzerinden kaydettiği aracın konumunu bulur ve otopark ücretini öder."
                 align="center"
               />
             </Reveal>

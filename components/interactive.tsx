@@ -745,7 +745,7 @@ export function PricingCards() {
             ))}
           </ul>
           <p className="mt-9 text-sm text-muted">Ücretsiz</p>
-          <a className="primary-button mt-4 !h-[43px] !px-7" href="#indir">Ücretsiz indir</a>
+          <a className="primary-button mt-4 !h-[43px] !px-7" href="#indir">Çok Yakında...</a>
         </div>
         <div className="rounded-2xl bg-brand-deep p-8 text-left text-white shadow-[0_22px_45px_rgba(201,31,37,0.2)] md:p-10">
           <h3 className="text-2xl font-extrabold tracking-[-0.04em]">Aylık Premium</h3>
@@ -758,7 +758,7 @@ export function PricingCards() {
           <p data-testid="premium-price" className="mt-8 text-3xl font-extrabold">
             {yearly ? "₺1.440" : "₺150"}<span className="ml-1 text-sm font-medium text-white/75">/ {yearly ? "yıl" : "ay"}</span>
           </p>
-          <a className="mt-5 inline-flex h-[43px] items-center rounded-md bg-white px-7 text-sm font-bold text-brand-deep transition-transform hover:-translate-y-px" href="#indir">Şimdi Premium</a>
+          <a className="mt-5 inline-flex h-[43px] items-center rounded-md bg-white px-7 text-sm font-bold text-brand-deep transition-transform hover:-translate-y-px" href="#indir">Çok Yakında...</a>
         </div>
       </div>
     </>
